@@ -18,14 +18,29 @@ enum custom_keycodes
   EPRM,
   VRSN,
   RGB_SLD,
-
+  LOWER,
+  RAISE,
+  SHFT_CAP,
+  CTRLB,
+  CPYPST,
+  FACE,
+  LSQBRKT,
+  RSQBRKT,
+  LSPRNTS,
+  RSPRNTS,
+  DOLLAR,
+  ALPHA,
+  POUNDSTAR,
+  FNUTT,
+  INTER,
+  RANDIG
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |    |   |   1  |   2  |   3  |   4  |   5  |   6  |           |   7  |   8  |   9  |   0  |   +  |   \  |  Bksp  |
+ * |   ESC  |   1  |   2  |   3  |   4  |   5  |   6  |           |      |   7  |   8  |   9  |   0  |   +  |   \    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |   TAB  |   Q  |   W  |   E  |   R  |   T  |      |           |      |   Y  |   U  |   I  |   O  |   P  |   Å    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -33,41 +48,155 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------| T 1  |           |  L1  |------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |   -  | Enter  |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |lCrtl |   |  |  '"` | {[<  |  >]} |                                       | Left |  Up  | Down | Right| Win  |
+ *   |lCrtl |      |      |      |  Alt |                                       | Left |  Up  | Down | Right| Win  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |PRTSRN| Win  |       | Home | End  |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      | Ins  |       | T3   |      |      |
+ *                                 | Space| Bksp |------|       |------|  TAB |Enter |
+ *                                 |      |      | Del  |       | T2   |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+    [0] = LAYOUT_ergodox(                                               // LH
+        KC_ESCAPE, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6,                  // LH-R1 7 keys
+        KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, TD(1),                    // LH-R2 7 keys
+        KC_BSPACE, KC_A, KC_S, KC_D, KC_F, KC_G,                        // LH-R3 6 keys
+        KC_LSHIFT, KC_Z, KC_X, KC_C, KC_V, KC_B, TG(1),                 // LH-R4 7 keys
+        CTL_T(KC_GRAVE), ___, ___, ___, KC_LALT,                        // LH-R5 5 keys
+        KC_ENTER, KC_LGUI,                                              // LH-R6 2 keys
+        KC_HOME,                                                        // LH-R7 1 key
+        KC_SPACE, KC_BSPACE, KC_DEL,                                    // LH-R8 3 keys
+                                                                        // RH
+        KC_BSPACE, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL,             // RH-R1 7 keys
+        TG(1), KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC,                   // RH-R2 7 keys
+        KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOTE,                      // RH-R3 6 keys
+        MEH_T(KC_NO), KC_N, KC_M, KC_COMMA, KC_DOT, KC_SLASH, KC_ENTER, // RH-R4 7 keys
+        KC_LEFT, KC_UP, KC_DOWN, KC_RGHT, KC_LGUI,                      // RH-R5 5 keys
+        KC_LALT, CTL_T(KC_ESCAPE),                                      // RH-R6 2 keys
+        TG(3),                                                          // RH-R7 1 key
+        TG(2), KC_TAB, KC_ENTER),                                       // RH-R8 3 keys
+    /* Keymap 1: Layer 1
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12   |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |   |  |  [<  |  {(  |  )}  |  >]  |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   @  |   $  |   #  |   *  |  '"  |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   &  |   ?+ |      |  /\  |  `   |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Ins  |       | PgUp |        |      |
- *                                 | Space| Bksp |------|       |------|  Enter |Space |
- *                                 |      |      | Del  |       | PgDn |        |      |
+ *                                 |      |      |      |       |      |        |      |
+ *                                 |      |      |------|       |------|        |      |
+ *                                 |      |      |      |       |      |        |      |
  *                                 `--------------------'       `----------------------'
  */
-    [0] = LAYOUT_ergodox(
+    [1] = LAYOUT_ergodox(
         // left
-        KC_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6,
-        KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, TG(1),
-        KC_BSPACE, KC_A, KC_S, KC_D, KC_F, KC_G,
-        KC_LSHIFT, KC_Z, KC_X, KC_C, KC_V, KC_B, ALL_T(KC_NO),
-        CTL_T(KC_GRAVE), KC_QUOTE, LALT(KC_LSHIFT), KC_LEFT, KC_RIGHT,
-        ALT_T(KC_APPLICATION), KC_LGUI, KC_HOME,
-        KC_SPACE, KC_BSPACE, KC_DEL,
+        ___, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
+        ___, KC_PIPE, LSQBRKT, LSPRNTS, RSPRNTS, RSQBRKT, ___,
+        ___, ALPHA, DOLLAR, KC_HASH, POUNDSTAR, FNUTT,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___,
         // right
-        KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSPACE,
-        TG(1), KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC,
-        KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOTE,
-        MEH_T(KC_NO), KC_N, KC_M, KC_COMMA, KC_DOT, KC_SLASH, KC_ENTER,
-        KC_LEFT, KC_UP, KC_DOWN, KC_RGHT, KC_LGUI,
-        KC_LALT, CTL_T(KC_ESCAPE),
-        TG(3), TG(2), KC_TAB,
-        KC_ENTER),
+        ___, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___),
 
-    [1] = LAYOUT_ergodox(KC_ESCAPE, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, ___, ___, KC_EXLM, KC_AT, KC_LCBR, KC_RCBR, KC_PIPE, ___, ___, KC_HASH, KC_DLR, KC_LPRN, KC_RPRN, KC_GRAVE, ___, KC_PERC, KC_CIRC, KC_LBRACKET, KC_RBRACKET, KC_TILD, ___, ___, ___, ___, ___, ___, RGB_MOD, ___, ___, RGB_VAD, RGB_VAI, ___, ___, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, ___, KC_UP, KC_7, KC_8, KC_9, KC_ASTR, KC_F12, KC_DOWN, KC_4, KC_5, KC_6, KC_PLUS, ___, ___, KC_AMPR, KC_1, KC_2, KC_3, KC_BSLASH, ___, ___, KC_DOT, KC_0, KC_EQUAL, ___, RGB_TOG, RGB_SLD, ___, ___, RGB_HUD, RGB_HUI),
-
-    [2] = LAYOUT_ergodox(___, ___, ___, ___, ___, ___, ___, ___, ___, ___, KC_MS_UP, ___, ___, ___, ___, ___, KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, KC_MS_BTN1, KC_MS_BTN2, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, KC_MEDIA_PLAY_PAUSE, ___, ___, ___, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, ___, ___, KC_AUDIO_VOL_UP, KC_AUDIO_VOL_DOWN, KC_AUDIO_MUTE, ___, ___, ___, ___, ___, ___, ___, KC_WWW_BACK),
-
-    [3] = LAYOUT_ergodox(RGB_MOD, RGB_SLD, ___, ___, ___, ___, ___, RGB_VAD, RGB_VAI, RGB_HUD, RGB_HUI, ___, ___, ___, RGB_TOG, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___),
-
+    /* Keymap 1: Layer 1
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12   |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |   |  |  [<  |  {(  |  )}  |  >]  |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   @  |   $  |   #  |   *  |  '"  |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   &  |   ?+ |      |  /\  |  `   |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+--------+------.
+ *                                 |      |      |      |       |      |        |      |
+ *                                 |      |      |------|       |------|        |      |
+ *                                 |      |      |      |       |      |        |      |
+ *                                 `--------------------'       `----------------------'
+ */
+    [2] = LAYOUT_ergodox(
+        // left
+        ___, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
+        ___, KC_PIPE, ___, KC_LCBR, KC_RCBR, ___, ___,
+        ___, KC_AT, KC_HASH, KC_DLR, KC_LPRN, KC_RPRN,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___,
+        // right
+        ___, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___),
+    /* Keymap 1: Layer 1
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12   |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |   |  |  [<  |  {(  |  )}  |  >]  |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   @  |   $  |   #  |   *  |  '"  |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |   &  |   ?+ |      |  /\  |  `   |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+--------+------.
+ *                                 |      |      |      |       |      |        |      |
+ *                                 |      |      |------|       |------|        |      |
+ *                                 |      |      |      |       |      |        |      |
+ *                                 `--------------------'       `----------------------'
+ */
+    [3] = LAYOUT_ergodox(
+        // left
+        ___, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
+        ___, KC_PIPE, ___, KC_LCBR, KC_RCBR, ___, ___,
+        ___, KC_AT, KC_HASH, KC_DLR, KC_LPRN, KC_RPRN,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___,
+        // right
+        ___, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___,
+        ___, ___,
+        ___,
+        ___, ___, ___),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
@@ -95,32 +224,147 @@ void matrix_init_user(void)
 #endif
 };
 
+// static uint16_t key_timer;
+// static uint8_t caps_status = 0;
+static uint8_t shift_status = 0;
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
   switch (keycode)
   {
-  // dynamically generate these.
-  case EPRM:
+  case KC_LSHIFT:
     if (record->event.pressed)
     {
-      eeconfig_init();
+      shift_status = 1;
     }
-    return false;
+    else
+    {
+      shift_status = 0;
+    }
     break;
-  case VRSN:
+  case LSQBRKT:
     if (record->event.pressed)
     {
-      SEND_STRING(QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+      if (shift_status == 1)
+      {
+        unregister_code(KC_LSHIFT);
+        register_code(KC_NONUS_BSLASH);
+        unregister_code(KC_NONUS_BSLASH);
+        register_code(KC_LSHIFT);
+      }
+      else
+      {
+        register_code(KC_RALT);
+        register_code(KC_8);
+        unregister_code(KC_8);
+        unregister_code(KC_RALT);
+      }
     }
     return false;
-    break;
-  case RGB_SLD:
+  case RSQBRKT:
     if (record->event.pressed)
     {
-      rgblight_mode(1);
+      if (shift_status == 1)
+      {
+        register_code(KC_NONUS_BSLASH);
+        unregister_code(KC_NONUS_BSLASH);
+      }
+      else
+      {
+        register_code(KC_RALT);
+        register_code(KC_9);
+        unregister_code(KC_9);
+        unregister_code(KC_RALT);
+      }
     }
     return false;
-    break;
+  case LSPRNTS:
+    if (record->event.pressed)
+    {
+      if (shift_status == 0)
+      {
+        register_code(KC_LSHIFT);
+        register_code(KC_8);
+        unregister_code(KC_8);
+        unregister_code(KC_LSHIFT);
+      }
+      else
+      {
+        unregister_code(KC_LSHIFT);
+        register_code(KC_RALT);
+        register_code(KC_7);
+        unregister_code(KC_7);
+        unregister_code(KC_RALT);
+        register_code(KC_LSHIFT);
+      }
+    }
+    return false;
+  case RSPRNTS:
+    if (record->event.pressed)
+    {
+      if (shift_status == 0)
+      {
+        register_code(KC_LSHIFT);
+        register_code(KC_9);
+        unregister_code(KC_9);
+        unregister_code(KC_LSHIFT);
+      }
+      else
+      {
+        unregister_code(KC_LSHIFT);
+        register_code(KC_RALT);
+        register_code(KC_0);
+        unregister_code(KC_0);
+        unregister_code(KC_RALT);
+        register_code(KC_LSHIFT);
+      }
+    }
+    return false;
+  case POUNDSTAR:
+    if (record->event.pressed)
+    {
+
+      register_code(KC_LSHIFT);
+      register_code(KC_NONUS_HASH);
+      unregister_code(KC_NONUS_HASH);
+      unregister_code(KC_LSHIFT);
+    }
+    return false;
+  case ALPHA:
+    if (record->event.pressed)
+    {
+      register_code(KC_RALT);
+      register_code(KC_2);
+      unregister_code(KC_2);
+      unregister_code(KC_RALT);
+    }
+    return false;
+  case DOLLAR:
+    if (record->event.pressed)
+    {
+      register_code(KC_RALT);
+      register_code(KC_4);
+      unregister_code(KC_4);
+      unregister_code(KC_RALT);
+    }
+    return false;
+  case FNUTT:
+    if (record->event.pressed)
+    {
+      if (shift_status == 1)
+      {
+        register_code(KC_LSHIFT);
+        register_code(KC_2);
+        unregister_code(KC_2);
+        unregister_code(KC_LSHIFT);
+      }
+      else
+      {
+
+        register_code(KC_NONUS_HASH);
+        unregister_code(KC_NONUS_HASH);
+      }
+    }
+    return false;
   }
   return true;
 }
@@ -137,58 +381,18 @@ uint32_t layer_state_set_user(uint32_t state)
   switch (layer)
   {
   case 0:
-#ifdef RGBLIGHT_COLOR_LAYER_0
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
-#else
-    rgblight_init();
-#endif
     break;
+
   case 1:
     ergodox_right_led_1_on();
-#ifdef RGBLIGHT_COLOR_LAYER_1
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
-#endif
     break;
   case 2:
     ergodox_right_led_2_on();
-#ifdef RGBLIGHT_COLOR_LAYER_2
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_2);
-#endif
     break;
   case 3:
+
     ergodox_right_led_3_on();
-#ifdef RGBLIGHT_COLOR_LAYER_3
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_3);
-#endif
-    break;
-  case 4:
-    ergodox_right_led_1_on();
-    ergodox_right_led_2_on();
-#ifdef RGBLIGHT_COLOR_LAYER_4
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_4);
-#endif
-    break;
-  case 5:
-    ergodox_right_led_1_on();
-    ergodox_right_led_3_on();
-#ifdef RGBLIGHT_COLOR_LAYER_5
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_5);
-#endif
-    break;
-  case 6:
-    ergodox_right_led_2_on();
-    ergodox_right_led_3_on();
-#ifdef RGBLIGHT_COLOR_LAYER_6
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-#endif
-    break;
-  case 7:
-    ergodox_right_led_1_on();
-    ergodox_right_led_2_on();
-    ergodox_right_led_3_on();
-#ifdef RGBLIGHT_COLOR_LAYER_7
-    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-#endif
+
     break;
   default:
     break;
